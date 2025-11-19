@@ -4,15 +4,15 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class DrivingPOVManager : MonoBehaviour
+public class CamManager : MonoBehaviour
 {
-    public List<CinemachineVirtualCamera> POVCams;
+    public List<CinemachineVirtualCamera> CamAngles;
 
     [Range(0.0f, 0.1f)]
     public float edgeThickness = 0.02f;
     private int screenW;
 
-    [SerializeField] private int currentCam = 2;
+    [SerializeField] private int currentAngle = 2;
 
     public CinemachineBrain cineBrain;
 
@@ -29,15 +29,15 @@ public class DrivingPOVManager : MonoBehaviour
         bool rightEdge = m.x < screenW * edgeThickness;
         bool leftEdge = m.x > screenW * (1 - edgeThickness);
 
-        // mouse touch edge -> update currentCam and use it as an idex to switch to correspoding object in POVCams list
-        if (leftEdge && currentCam < POVCams.Count - 1 && !cineBrain.IsBlending)
+        // mouse touch edge -> update currentAngle and use it as an idex to switch to correspoding entry in CamAngles list
+        if (leftEdge && currentAngle < CamAngles.Count - 1 && !cineBrain.IsBlending)
         {
-            currentCam++;
+            currentAngle++;
             SwitchToCurrentCam();
         }
-        else if (rightEdge && currentCam > 0 && !cineBrain.IsBlending)
+        else if (rightEdge && currentAngle > 0 && !cineBrain.IsBlending)
         {
-            currentCam--;
+            currentAngle--;
             SwitchToCurrentCam();
         }
     }
@@ -45,12 +45,12 @@ public class DrivingPOVManager : MonoBehaviour
     private void SwitchToCurrentCam()
     {
         // Lower all cam prio
-        foreach (var p in POVCams)
+        foreach (var p in CamAngles)
         {
             p.Priority = 5;
         }
 
         // Boost currentCam prio
-        POVCams[currentCam].Priority = 10;
+        CamAngles[currentAngle].Priority = 10;
     }
 }
