@@ -16,7 +16,7 @@ public class CamManager : MonoBehaviour
     private int screenW;
     private int screenH;
 
-    public int currentAngle = 2;
+    public int currentAngle;
 
     public CinemachineBrain cineBrain;
 
