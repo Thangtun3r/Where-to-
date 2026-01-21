@@ -49,6 +49,11 @@ public class WaypointManagerWindow : EditorWindow
         {
             CreateRightTurn();
         }
+
+        if (GUILayout.Button("Connect Manual"))
+        {
+            
+        }
     }
 
     private void CreateWaypoint()
