@@ -78,10 +78,9 @@ public class WaypointManagerWindow : EditorWindow
         Waypoint waypoint = waypointObject.GetComponent<Waypoint>();
         if (waypointRoot.childCount > 1)
         {
-            SetPreviousWaypoint(waypoint);
-
-            waypoint.previousWaypoint.leftTurn = waypoint.transform;
-            waypoint.previousWaypoint.isIntersection = true;
+            // //SetPreviousWaypoint(waypoint);
+            // waypoint.previousWaypoint.leftTurn = waypoint.transform;
+            // waypoint.previousWaypoint.isIntersection = true;
         }
 
         Selection.activeObject = waypoint.gameObject;
@@ -95,10 +94,9 @@ public class WaypointManagerWindow : EditorWindow
         Waypoint waypoint = waypointObject.GetComponent<Waypoint>();
         if (waypointRoot.childCount > 1)
         {
-            SetPreviousWaypoint(waypoint);
-
-            waypoint.previousWaypoint.rightTurn = waypoint.transform;
-            waypoint.previousWaypoint.isIntersection = true;
+            // //SetPreviousWaypoint(waypoint);
+            // waypoint.previousWaypoint.rightTurn = waypoint.transform;
+            // waypoint.previousWaypoint.isIntersection = true;
         }
 
         Selection.activeObject = waypoint.gameObject;
@@ -108,10 +106,10 @@ public class WaypointManagerWindow : EditorWindow
 
     private void SetPreviousWaypoint(Waypoint waypoint)
     {
-        waypoint.previousWaypoint = Selection.activeGameObject.GetComponent<Waypoint>();
-        waypoint.previousWaypoint.nextWaypoint = waypoint;
+        // waypoint.previousWaypoint = Selection.activeGameObject.GetComponent<Waypoint>();
+        // waypoint.previousWaypoint.nextWaypoint = waypoint;
 
-        waypoint.transform.position = waypoint.previousWaypoint.transform.position;
-        waypoint.transform.forward = waypoint.previousWaypoint.transform.forward;
+        // waypoint.transform.position = waypoint.previousWaypoint.transform.position;
+        // waypoint.transform.forward = waypoint.previousWaypoint.transform.forward;
     }
 }

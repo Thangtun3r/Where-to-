@@ -12,16 +12,32 @@ static public class WaypointEditor
 
         Gizmos.color = Color.white;
 
-        if(waypoint.previousWaypoint != null)
-        {
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawLine(waypoint.transform.position, waypoint.previousWaypoint.transform.position);
-        }
+        // if(waypoint.nextWaypoint != null)
+        // {
+        //     Gizmos.color = Color.cyan;
+        //     Gizmos.DrawLine(waypoint.transform.position, waypoint.nextWaypoint.transform.position);
+        // }
 
-        if(waypoint.nextWaypoint != null)
+        // if(waypoint.previousWaypoint != null)
+        // {
+        //     Gizmos.color = Color.cyan;
+        //     Gizmos.DrawLine(waypoint.transform.position, waypoint.previousWaypoint.transform.position);
+        // }
+
+        if(waypoint.isIntersection)
         {
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawLine(waypoint.transform.position, waypoint.nextWaypoint.transform.position);
+            if(waypoint.leftTurn != null)
+            {
+                Gizmos.color = Color.green;
+                Gizmos.DrawLine(waypoint.transform.position, waypoint.leftTurn.position);
+            }
+
+            if(waypoint.rightTurn != null)
+            {
+                Gizmos.color = Color.green;
+                Gizmos.DrawLine(waypoint.transform.position, waypoint.rightTurn.position);
+            }
         }
+        
     }
 }
