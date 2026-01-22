@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class WaypointManagerWindow : EditorWindow
 {
-    [MenuItem ("Tool/Waypoint Editor")]
+    [MenuItem ("Tools/Waypoint Editor")]
 
     public static void Open()
     {
