@@ -1,28 +1,27 @@
 using UnityEngine;
 using UnityEditor;
+using System.Collections.ObjectModel;
 
 [InitializeOnLoad()]
 
 static public class WaypointEditor
 {
-    [DrawGizmo(GizmoType.NonSelected | GizmoType.Selected | GizmoType.Pickable)]
+    [DrawGizmo(GizmoType.NonSelected | GizmoType.Selected | GizmoType.Pickable | GizmoType.Active)]
     public static void OnDrawSceneGizmo(Waypoint waypoint, GizmoType gizmoType)
     {
-        Gizmos.DrawSphere(waypoint.transform.position, 0.2f);
+        Gizmos.DrawSphere(waypoint.transform.position, 0.5f);
 
-        Gizmos.color = Color.white;
+        Gizmos.color = Color.yellow;
 
-        // if(waypoint.nextWaypoint != null)
-        // {
-        //     Gizmos.color = Color.cyan;
-        //     Gizmos.DrawLine(waypoint.transform.position, waypoint.nextWaypoint.transform.position);
-        // }
+        foreach (Waypoint connectedWaypoint in waypoint.connectedWaypoints)
+        {
+            if (connectedWaypoint != null)
+            {
+                Gizmos.color = Color.cyan;
+                Gizmos.DrawLine(waypoint.transform.position, connectedWaypoint.transform.position);
+            }
+        }
 
-        // if(waypoint.previousWaypoint != null)
-        // {
-        //     Gizmos.color = Color.cyan;
-        //     Gizmos.DrawLine(waypoint.transform.position, waypoint.previousWaypoint.transform.position);
-        // }
 
         if(waypoint.isIntersection)
         {

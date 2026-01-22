@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor.Rendering;
 using UnityEngine;
+using UnityEngine.Analytics;
 
 public class WaypointFollower : MonoBehaviour
 {
@@ -12,17 +14,10 @@ public class WaypointFollower : MonoBehaviour
     public Transform nextTarget;
     public Transform previousTarget;
     private Vector3 direction;
+    public float distance;
 
     [SerializeField] private int turnDesire = 1;
     private bool stop = false;
-
-    private void Start()
-    {
-        if (previousTarget != null)
-        {
-            previousTarget = this.transform;
-        }
-    }
 
     void Update()
     {
@@ -46,10 +41,12 @@ public class WaypointFollower : MonoBehaviour
             
             nextTarget = tempPreviousTarget;
             previousTarget = tempNextTarget;
+
+            stop = false;
         }
 
         //Calculate distance and set waypoint
-        float distance = Vector3.Distance(this.transform.position, nextTarget.position);
+        distance = Vector3.Distance(this.transform.position, nextTarget.position);
 
         //If target hasn's been reached, rotate towards it and move foward
         if (distance > 0.5)
@@ -66,7 +63,19 @@ public class WaypointFollower : MonoBehaviour
             //If target ISN'T a waypoint, move to the next target
             if (targetWaypointScript.isIntersection != true)
             {
-                FindNewWaypoint(targetWaypointScript);
+                bool foundNext = false;
+                foreach (Waypoint connectedWaypoint in targetWaypointScript.connectedWaypoints)
+                {
+                    if (connectedWaypoint != null && connectedWaypoint.gameObject.transform != previousTarget)
+                    {
+                        previousTarget = nextTarget;
+                        nextTarget = connectedWaypoint.gameObject.transform;
+                        stop = false;
+                        foundNext = true;
+                        break;
+                    }
+                }
+                if (!foundNext) stop = true;
             }
 
             //If target IS a waypoint, set target according to desire
@@ -76,20 +85,49 @@ public class WaypointFollower : MonoBehaviour
                 switch (turnDesire)
                 {
                     case 0:
-                        nextTarget = targetWaypointScript.leftTurn.gameObject.transform;
-                        stop = false;
+                        if (targetWaypointScript.leftTurn != null)
+                        {
+                            previousTarget = nextTarget;
+                            nextTarget = targetWaypointScript.leftTurn.gameObject.transform;
+                            stop = false;
+                        }
+                        else
+                        {
+                            stop = true;
+                        }
                         turnDesire = 1;
                         break;
 
                     //If no desire, go straight if possible, else stop
                     case 1:
-                        FindNewWaypoint(targetWaypointScript);
-                        stop = true;
+                        {
+                            bool foundStraight = false;
+                            foreach (Waypoint connectedWaypoint in targetWaypointScript.connectedWaypoints)
+                            {
+                                if (connectedWaypoint != null && connectedWaypoint.gameObject.transform != previousTarget)
+                                {
+                                    previousTarget = nextTarget;
+                                    nextTarget = connectedWaypoint.gameObject.transform;
+                                    stop = false;
+                                    foundStraight = true;
+                                    break;
+                                }
+                            }
+                            if (!foundStraight) stop = true;
+                        }
                         break;
 
                     case 2:
-                        nextTarget = targetWaypointScript.rightTurn.gameObject.transform;
-                        stop = false;
+                        if (targetWaypointScript.rightTurn != null)
+                        {
+                            previousTarget = nextTarget;
+                            nextTarget = targetWaypointScript.rightTurn.gameObject.transform;
+                            stop = false;
+                        }
+                        else
+                        {
+                            stop = true;
+                        }
                         turnDesire = 1;
                         break;
                 }
@@ -125,20 +163,5 @@ public class WaypointFollower : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, actualTurn * Time.deltaTime);
 
         transform.position += this.transform.forward * actualSpeed * Time.deltaTime;
-    }
-
-    private void FindNewWaypoint(Waypoint targetWaypointScript)
-    {
-        //Set the current target as previous, then find a new target from connected waypoints
-        foreach (Waypoint connectedWaypoint in targetWaypointScript.connectedWaypoints)
-        {
-            if (connectedWaypoint != null && connectedWaypoint.gameObject.transform != previousTarget)
-            {
-                previousTarget = nextTarget;
-                nextTarget = connectedWaypoint.gameObject.transform;
-                stop = false;
-                break;
-            }
-        }
     }
 }
