@@ -100,21 +100,22 @@ public class WaypointFollower : MonoBehaviour
 
                     //If no desire, go straight if possible, else stop
                     case 1:
+                        
+                        bool foundStraight = false;
+                        foreach (Waypoint connectedWaypoint in targetWaypointScript.connectedWaypoints)
                         {
-                            bool foundStraight = false;
-                            foreach (Waypoint connectedWaypoint in targetWaypointScript.connectedWaypoints)
+                            if (connectedWaypoint != null && connectedWaypoint.gameObject.transform != previousTarget)
                             {
-                                if (connectedWaypoint != null && connectedWaypoint.gameObject.transform != previousTarget)
-                                {
-                                    previousTarget = nextTarget;
-                                    nextTarget = connectedWaypoint.gameObject.transform;
-                                    stop = false;
-                                    foundStraight = true;
-                                    break;
-                                }
+                                previousTarget = nextTarget;
+                                nextTarget = connectedWaypoint.gameObject.transform;
+                                stop = false;
+                                foundStraight = true;
+                                break;
                             }
-                            if (!foundStraight) stop = true;
                         }
+
+                        if (!foundStraight) stop = true;
+                        
                         break;
 
                     case 2:
