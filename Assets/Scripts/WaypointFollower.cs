@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -26,8 +27,12 @@ public class WaypointFollower : MonoBehaviour
     
     void Update()
     {
-        signalID = turnDesire;
-        SignalAnimator.SetInteger("Signal", signalID);
+        if (SignalAnimator != null)
+        {
+            signalID = turnDesire;
+            SignalAnimator.SetInteger("Signal", signalID);
+        }
+        
         //Turn desire 0 = left desire ; 1 = no desire  ; 2 = right desire
         if (Input.GetKeyDown(KeyCode.A))
         {
