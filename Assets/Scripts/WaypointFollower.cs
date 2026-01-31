@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -18,9 +19,20 @@ public class WaypointFollower : MonoBehaviour
 
     [SerializeField] private int turnDesire = 1;
     private bool stop = false;
-
+    
+    //Use this to manipulate the car turn signal's animation
+    [SerializeField] private Animator SignalAnimator;
+    private int signalID;
+    //-------------------------------//
+    
     void Update()
     {
+        if (SignalAnimator != null)
+        {
+            signalID = turnDesire;
+            SignalAnimator.SetInteger("Signal", signalID);
+        }
+        
         //Turn desire 0 = left desire ; 1 = no desire  ; 2 = right desire
         if (Input.GetKeyDown(KeyCode.A))
         {
@@ -44,6 +56,10 @@ public class WaypointFollower : MonoBehaviour
 
             stop = false;
         }
+        else if (Input.GetKeyDown(KeyCode.Space))
+        {
+            stop = !stop;
+        }
 
         //Calculate distance and set waypoint
         distance = Vector3.Distance(this.transform.position, nextTarget.position);
@@ -56,9 +72,10 @@ public class WaypointFollower : MonoBehaviour
         }
 
         //If target has been reached find a new target
-        else if (distance <= 0.5)
+        else if (distance <= 1)
         {
             Waypoint targetWaypointScript = nextTarget.gameObject.GetComponent<Waypoint>();
+            signalID = 1;
 
             //If target ISN'T a waypoint, move to the next target
             if (targetWaypointScript.isIntersection != true)
