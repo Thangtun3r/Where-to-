@@ -19,7 +19,6 @@ public class NewBehaviourScript
             NPC npc = ScriptableObject.CreateInstance<NPC>();
             npc.npcId = npcData[0];
             npc.npcName = npcData[1];
-            npc.preference = npcData[2];
 
             AssetDatabase.CreateAsset(npc, "Assets/Database/NPCs/" + npc.npcId + ".asset");
         }
